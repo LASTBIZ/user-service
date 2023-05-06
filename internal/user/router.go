@@ -1,34 +1,41 @@
 package user
 
 import (
-	"lastbiz/user-service/pkg/logging"
+	"context"
+	"lastbiz/user-service/protos/user"
 )
 
-type Service struct {
-	storage Storage
-	log     logging.Logger
+type router struct {
+	service Service
+	user.UnimplementedUserServiceServer
 }
 
-func NewUserService() Service {
-	return Service{}
+func NewUserRouter(service Service) user.UserServiceServer {
+	return router{
+		service: service,
+	}
 }
 
-func (s Service) CreateUser(user User) (User, error) {
-	return s.storage.CreateUser(user)
+func (r router) GetUser(ctx context.Context, request *user.UserGetRequest) (*user.User, error) {
+	r.service.GetUser()
 }
 
-func (s Service) DeleteUser(userId uint32) error {
-	return s.storage.DeleteUser(userId)
+func (r router) CreateUser(ctx context.Context, u *user.User) (*user.User, error) {
+
 }
 
-func (s Service) UpdateUser(user User) (User, error) {
-	return s.storage.UpdateUser(user)
+func (r router) DeleteUser(ctx context.Context, request *user.DeleteUserRequest) (*interface{}, error) {
+
 }
 
-func (s Service) GetUser(userId uint32) (User, error) {
-	return s.storage.GetUser(userId)
+func (r router) UpdateUser(ctx context.Context, u *user.User) (*user.User, error) {
+
 }
 
-func (s Service) GetUserByEmail(email string) (User, error) {
-	return s.storage.GetUserByEmail(email)
+func convertUserToGRPCUser(user User) *user.User {
+
+}
+
+func convertGRPUserToUser(authUser *user.User) User {
+
 }
