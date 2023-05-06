@@ -8,8 +8,12 @@ option go_package = "protos/user/";
 service UserService {
   rpc getUser(UserGetRequest) returns (User) {}
   rpc CreateUser(User) returns (User) {}
-  rpc DeleteUser(User) returns (google.protobuf.Empty) {}
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {}
   rpc UpdateUser(User) returns(User) {}
+}
+
+message DeleteUserRequest {
+  uint32 user_id = 1;
 }
 
 message UserGetRequest {
