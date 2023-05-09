@@ -8,8 +8,7 @@ import (
 )
 
 type Config struct {
-	GRPCPort       string `yaml:"grpc_port" env:"GRPC_PORT"`
-	UserServiceURL string `yaml:"userServiceURL" env:"USER_SERVICE_URL"`
+	GRPCPort string `yaml:"grpc_port" env:"GRPC_PORT"`
 }
 
 type Postgres struct {

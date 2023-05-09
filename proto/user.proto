@@ -3,7 +3,7 @@ syntax = "proto3";
 package user_proto;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-option go_package = "protos/user/";
+option go_package = "./pkg/user/";
 
 service UserService {
   rpc getUser(UserGetRequest) returns (User) {}
