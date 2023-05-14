@@ -18,8 +18,8 @@ type User struct {
 	Role         string
 	Email        string
 	Phone        string
-	Organization Organization
-	Messengers   []Messenger
+	Organization Organization `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Messengers   []Messenger  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (u User) toGRPC() *user.User {

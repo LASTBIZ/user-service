@@ -36,18 +36,39 @@ func (s Storage) DeleteUser(userId uint32) error {
 func (s Storage) UpdateUser(userUpdate User) (*User, error) {
 	err := s.db.Model(&User{}).Where(&User{ID: userUpdate.ID}).
 		Updates(map[string]interface{}{
-			"blocked":      userUpdate.Blocked,
-			"role":         userUpdate.Role,
-			"firstname":    userUpdate.Firstname,
-			"lastname":     userUpdate.Lastname,
-			"is_verify":    userUpdate.IsVerify,
-			"phone":        userUpdate.Phone,
-			"messengers":   userUpdate.Messengers,
-			"organization": userUpdate.Organization,
-			"updated_at":   time.Now(),
+			"blocked":    userUpdate.Blocked,
+			"role":       userUpdate.Role,
+			"firstname":  userUpdate.Firstname,
+			"lastname":   userUpdate.Lastname,
+			"is_verify":  userUpdate.IsVerify,
+			"phone":      userUpdate.Phone,
+			"updated_at": time.Now(),
 		}).
 		First(&userUpdate).Error
 	return &userUpdate, err
+}
+
+func (s Storage) AddOrganization() {
+
+}
+
+func (s Storage) RemoveOrganization() {
+
+}
+
+func (s Storage) AddMessenger() {
+
+}
+
+func (s Storage) RemoveMessenger() {
+
+}
+
+func (s Storage) LinkOrganization() {
+
+}
+
+func (s Storage) LinkMessenger() {
 
 }
 
