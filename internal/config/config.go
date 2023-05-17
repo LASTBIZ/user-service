@@ -11,7 +11,7 @@ type Config struct {
 	GRPCPort string `yaml:"grpc_port" env:"GRPC_PORT" env-required:"true"`
 	Postgres struct {
 		Host     string `yaml:"host" env:"POSTGRES_HOST" env-required:"true"`
-		User     string `yaml:"host" env:"POSTGRES_USER" env-required:"true"`
+		User     string `yaml:"user" env:"POSTGRES_USER" env-required:"true"`
 		Password string `yaml:"password" env:"POSTGRES_PASSWORD" env-required:"true"`
 		DB       string `yaml:"db" env:"POSTGRES_DATABASE" env-required:"true"`
 		Port     string `yaml:"port" env:"POSTGRES_PORT" env-required:"true"`

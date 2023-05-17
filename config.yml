@@ -1,0 +1,7 @@
+grpc_port: 5000
+postgresql:
+  host:
+  port:
+  user:
+  password:
+  db:
