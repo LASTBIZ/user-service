@@ -36,46 +36,42 @@ func (s Storage) DeleteUser(userId uint32) error {
 func (s Storage) UpdateUser(userUpdate User) (*User, error) {
 	err := s.db.Model(&User{}).Where(&User{ID: userUpdate.ID}).
 		Updates(map[string]interface{}{
-			"blocked":    userUpdate.Blocked,
-			"role":       userUpdate.Role,
-			"firstname":  userUpdate.Firstname,
-			"lastname":   userUpdate.Lastname,
-			"is_verify":  userUpdate.IsVerify,
-			"phone":      userUpdate.Phone,
-			"updated_at": time.Now(),
+			"blocked":      userUpdate.Blocked,
+			"role":         userUpdate.Role,
+			"firstname":    userUpdate.Firstname,
+			"lastname":     userUpdate.Lastname,
+			"is_verify":    userUpdate.IsVerify,
+			"phone":        userUpdate.Phone,
+			"updated_at":   time.Now(),
+			"organization": userUpdate.Organization,
 		}).
 		First(&userUpdate).Error
 	return &userUpdate, err
 }
 
-func (s Storage) AddOrganization() {
+func (s Storage) AddMessenger(messenger Messenger) (*Messenger, error) {
+	var getMessenger Messenger
+	err := s.db.Model(&Messenger{}).
+		Create(&messenger).
+		First(&getMessenger).
+		Error
 
+	return &getMessenger, err
 }
 
-func (s Storage) RemoveOrganization() {
-
-}
-
-func (s Storage) AddMessenger() {
-
-}
-
-func (s Storage) RemoveMessenger() {
-
-}
-
-func (s Storage) LinkOrganization() {
-
-}
-
-func (s Storage) LinkMessenger() {
-
+func (s Storage) RemoveMessenger(id uint32, userID uint32) error {
+	err := s.db.Delete(&Messenger{ID: id, UserId: userID}).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s Storage) GetUser(userId uint32) (*User, error) {
 	var getUser User
 	err := s.db.
 		Model(&User{}).
+		Preload("Messengers").
 		Where(&User{ID: userId}).
 		First(&getUser).
 		Error
@@ -83,10 +79,10 @@ func (s Storage) GetUser(userId uint32) (*User, error) {
 }
 
 func (s Storage) GetUserByEmail(email string) (*User, error) {
-	var getUser User
+	var getUser *User
 	err := s.db.
-		Model(&User{}).
+		Preload("Messengers").
 		Where(&User{Email: strings.ToLower(email)}).
 		First(&getUser).Error
-	return &getUser, err
+	return getUser, err
 }

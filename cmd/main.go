@@ -5,6 +5,7 @@ import (
 	"google.golang.org/grpc"
 	"lastbiz/user-service/internal/config"
 	user1 "lastbiz/user-service/internal/user"
+	"lastbiz/user-service/internal/user/services"
 	"lastbiz/user-service/pkg/logging"
 	"lastbiz/user-service/pkg/postgres"
 	"lastbiz/user-service/pkg/user"
@@ -23,10 +24,10 @@ func main() {
 
 	pgClient := postgres.NewClient(ctx, 5, time.Second*5, pgconfig)
 	userStorage := user1.NewUserStorage(*pgClient)
-	userService := user1.NewUserService(userStorage)
+	userService := services.NewUserService(userStorage)
 
 	logging.Info(ctx, "run application")
-	lis, err := net.Listen("tcp", cfg.GRPCPort)
+	lis, err := net.Listen("tcp", "0.0.0.0:"+cfg.GRPCPort)
 
 	if err != nil {
 		logging.GetLogger().Fatal(err)

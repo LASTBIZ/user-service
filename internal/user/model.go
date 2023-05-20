@@ -7,22 +7,22 @@ import (
 )
 
 type User struct {
-	ID           uint32 `gorm:"primarykey"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	IsVerify     bool `gorm:"default:false"`
-	Firstname    string
-	Lastname     string
-	FullName     string `gorm:"->;type:GENERATED ALWAYS AS (concat(firstname,' ',lastname));default:(-);"`
-	Blocked      bool   `gorm:"default:false"`
+	ID        uint32 `gorm:"primarykey"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	IsVerify  bool `gorm:"default:false"`
+	Firstname string
+	Lastname  string
+	//FullName     string `gorm:"->;type:GENERATED ALWAYS AS (concat(firstname,' ',lastname));default:(-);"`
+	Blocked      bool `gorm:"default:false"`
 	Role         string
 	Email        string
 	Phone        string
-	Organization Organization `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Messengers   []Messenger  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Organization string
+	Messengers   []Messenger `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
-func (u User) toGRPC() *user.User {
+func (u User) ToGRPC() *user.User {
 	var messengers []*user.Messenger
 	for _, messenger := range u.Messengers {
 		messengers = append(messengers, messenger.toGRPC())
@@ -38,9 +38,9 @@ func (u User) toGRPC() *user.User {
 		Phone:        u.Phone,
 		FirstName:    u.Firstname,
 		LastName:     u.Lastname,
-		FullName:     u.FullName,
+		FullName:     u.Firstname + " " + u.Lastname,
 		Role:         u.Role,
-		Organization: u.Organization.toGRPC(),
+		Organization: u.Organization,
 		Messengers:   messengers,
 	}
 }
@@ -56,18 +56,5 @@ func (m Messenger) toGRPC() *user.Messenger {
 	return &user.Messenger{
 		Name:  m.Name,
 		Value: m.Value,
-	}
-}
-
-type Organization struct {
-	ID     uint32 `gorm:"primarykey"`
-	Name   string
-	UserId uint32
-}
-
-func (o Organization) toGRPC() *user.Organization {
-	return &user.Organization{
-		Name: o.Name,
-		Id:   o.UserId,
 	}
 }

@@ -47,7 +47,6 @@ func NewClient(ctx context.Context, maxAttempts int, maxDelay time.Duration, cfg
 		log.Fatal("All attempts are exceeded. Unable to connect to postgres")
 	}
 	pool.AutoMigrate(&user.Messenger{})
-	pool.AutoMigrate(&user.Organization{})
 	pool.AutoMigrate(&user.User{})
 	return pool
 }

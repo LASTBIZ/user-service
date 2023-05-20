@@ -1,7 +1,7 @@
-grpc_port: 5000
+grpc_port: 5001
 postgresql:
-  host:
-  port:
-  user:
-  password:
-  db:
+  host: 127.0.0.1
+  port: 5432
+  user: test
+  password: example
+  db: test
