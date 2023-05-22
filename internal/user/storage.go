@@ -1,6 +1,7 @@
 package user
 
 import (
+	"errors"
 	"gorm.io/gorm"
 	"strings"
 	"time"
@@ -60,6 +61,7 @@ func (s Storage) AddMessenger(messenger Messenger) (*Messenger, error) {
 }
 
 func (s Storage) RemoveMessenger(id uint32, userID uint32) error {
+
 	err := s.db.Delete(&Messenger{ID: id, UserId: userID}).Error
 	if err != nil {
 		return err
@@ -69,20 +71,24 @@ func (s Storage) RemoveMessenger(id uint32, userID uint32) error {
 
 func (s Storage) GetUser(userId uint32) (*User, error) {
 	var getUser User
-	err := s.db.
-		Model(&User{}).
-		Preload("Messengers").
-		Where(&User{ID: userId}).
-		First(&getUser).
-		Error
-	return &getUser, err
+	result := s.db.Where(&User{ID: userId}).Preload("Messengers").Where(&User{ID: userId}).First(&getUser)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, errors.New("USER_NOT_FOUND")
+	}
+	if result.Error != nil {
+		return nil, errors.New("USER_NOT_FOUND")
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New("USER_NOT_FOUND")
+	}
+
+	return &getUser, nil
 }
 
 func (s Storage) GetUserByEmail(email string) (*User, error) {
 	var getUser *User
-	err := s.db.
-		Preload("Messengers").
-		Where(&User{Email: strings.ToLower(email)}).
-		First(&getUser).Error
-	return getUser, err
+	if res := s.db.Where(&User{Email: strings.ToLower(email)}).Preload("Messengers").Where(&User{ID: userId}).First(&getUser); res.RowsAffected == 0 {
+		return nil, errors.New("USER_NOT_FOUND")
+	}
+	return getUser, nil
 }

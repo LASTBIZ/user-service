@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "./pkg/user/";
+option go_package = "./pkg/user/pb";
 
 message Messenger {
   uint32 id = 1;
