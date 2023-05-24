@@ -51,9 +51,26 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-func (r *userRepo) CreateUser(ctx context.Context, user *biz.User) (*biz.User, error) {
-	//TODO implement me
-	panic("implement me")
+func (r *userRepo) CreateUser(ctx context.Context, u *biz.User) (*biz.User, error) {
+	var user User
+	result := r.data.db.Where(&User{Email: u.Email}).First(&user)
+	if result.RowsAffected == 1 {
+		return nil, errors.New(500, "USER_EXISTS", "user is exists by email "+u.Email)
+	}
+
+	user.Email = u.Email
+	user.Firstname = u.Firstname
+	user.Lastname = u.Lastname
+	u.Role = "user"
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
+	res := r.data.db.Create(&user)
+	if res.Error != nil {
+		return nil, errors.New(500, "CREATE_USER_ERROR", "error create user")
+	}
+
+	userInfoRes := modelToResponse(user)
+	return userInfoRes, nil
 }
 
 func paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
