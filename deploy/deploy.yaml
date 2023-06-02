@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  selector:
+    matchLabels:
+      app: user-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: IMAGE
+          ports:
+            - name: user-service
+              containerPort: 9000
+          env:
+            - name: USER_DB_SOURCE
+              valueFrom:
+               secretKeyRef:
+                 name: database
+                 key: connect
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 3000
+      targetPort: user-service
