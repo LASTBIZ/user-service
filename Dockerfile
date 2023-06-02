@@ -22,4 +22,4 @@ WORKDIR /app
 EXPOSE 8000
 EXPOSE 9000
 
-CMD ["./server", "-conf", "/app/config.yaml"]
+CMD ["./user-service", "-conf", "/app/config.yaml"]
