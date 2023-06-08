@@ -27,6 +27,7 @@ type User struct {
 	Phone        string
 	Organization string
 	Messengers   Messenger
+	Website      string
 }
 
 type UserRepo interface {

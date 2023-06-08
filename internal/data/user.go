@@ -36,6 +36,7 @@ type User struct {
 	Phone        string
 	Organization string
 	Messengers   Messenger `gorm:"embedded"`
+	Website      string
 	//Messengers   []Messenger `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
@@ -164,6 +165,7 @@ func (r *userRepo) UpdateUser(ctx context.Context, user *biz.User) (bool, error)
 		WhatsApp:  user.Messengers.WhatsApp,
 		Signal:    user.Messengers.Signal,
 	}
+	userInfo.Website = user.Website
 	userInfo.Blocked = user.Blocked
 	userInfo.UpdatedAt = time.Now()
 
@@ -213,6 +215,7 @@ func modelToResponse(user User) *biz.User {
 			Line:      user.Messengers.Line,
 			Signal:    user.Messengers.Signal,
 		},
+		Website: user.Website,
 	}
 	return userInfoRsp
 }

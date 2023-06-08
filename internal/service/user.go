@@ -53,6 +53,7 @@ func (u *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 			Signal:    req.Messenger.Signal,
 		},
 		Blocked: req.Blocked,
+		Website: req.Website,
 	})
 
 	if err != nil {
@@ -143,6 +144,7 @@ func UserResponse(user *biz.User) *pb.UserInfoResponse {
 			Line:      user.Messengers.Line,
 			Signal:    user.Messengers.Signal,
 		},
+		Website: user.Website,
 	}
 	return userInfoRsp
 }

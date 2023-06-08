@@ -34,6 +34,7 @@ message UpdateUserRequest {
 	string organization = 7;
 	Messenger messenger = 8;
 	bool blocked = 9;
+	string website = 10;
 }
 
 message EmailRequest {
@@ -69,6 +70,7 @@ message UserInfoResponse {
 	bool blocked = 11;
 	string role = 12;
 	Messenger messengers = 13;
+	string website = 14;
 }
 
 message Messenger {
